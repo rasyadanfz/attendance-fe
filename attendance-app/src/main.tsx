@@ -7,20 +7,23 @@ import LoginPage from './components/login/LoginPage'
 import AttendancePage from './components/attendance/AttendancePage'
 import UnprotectedLayout from './layouts/UnprotectedLayout'
 import RootLayout from './layouts/RootLayout'
+import { AuthProvider } from './providers/AuthProvider'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route element={<RootLayout/>}>
-          <Route element={<ProtectedLayout />}>
-            <Route path='' element={<AttendancePage />}/>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<RootLayout/>}>
+            <Route element={<ProtectedLayout />}>
+              <Route path='' element={<AttendancePage />}/>
+            </Route>
+            <Route element={<UnprotectedLayout />}>
+              <Route path='/login' element={<LoginPage />}/>
+            </Route>
           </Route>
-          <Route element={<UnprotectedLayout />}>
-            <Route path='/login' element={<LoginPage />}/>
-          </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   </StrictMode>,
 )

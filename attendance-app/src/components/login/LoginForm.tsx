@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { useForm, type SubmitHandler } from "react-hook-form"
 import useSWRMutation from 'swr/mutation'
 import { login } from '../../api'
-import { setToken } from '../../utils'
 import { useNavigate } from 'react-router'
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io'
 import Button from '../Button'
+import { useAuth } from '../../hooks/useAuth'
 
 type LoginFormValues = {
   email: string
@@ -14,18 +14,18 @@ type LoginFormValues = {
 
 function LoginForm() {
   const navigate = useNavigate();
+  const {setAccessToken} = useAuth()
   const [toggleVisiblePassword, setToggleVisiblePassword] = useState(false)
   const {register, handleSubmit, formState: { errors }} = useForm<LoginFormValues>()
   const { trigger, isMutating, error } = useSWRMutation("/auth/login", login, {
     onSuccess: ({ accessToken }) => {
-      setToken(accessToken);
+      setAccessToken(accessToken)
       navigate("/", {replace: true})
     },
     throwOnError: false
   })
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
-    
     trigger(data)
   }
 
@@ -43,7 +43,7 @@ function LoginForm() {
             <label htmlFor='password'>Password</label>
             <div className='relative'>
               <input type={toggleVisiblePassword ? 'text' : 'password'} id='password' className='w-full border rounded-lg p-2' 
-                {...register("password", {required: "Password is required", minLength: {value: 7, message: "Password must be at least 7 characters"}})}
+                {...register("password", {required: "Password is required"})}
               />
               <div className='absolute inset-y-0 pr-3 flex right-0 items-center cursor-pointer' onClick={() => setToggleVisiblePassword(p => !p)}>
                 {toggleVisiblePassword ? <IoMdEyeOff className="text-base md:text-lg"/> : <IoMdEye className="text-base md:text-lg"/>}
