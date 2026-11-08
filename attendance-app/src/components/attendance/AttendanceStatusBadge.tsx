@@ -2,18 +2,18 @@ import Badge from "../Badge"
 import type { AttendanceStatus } from "./types"
 
 const statusLabel: Record<AttendanceStatus, string> = {
-  NotClockedIn: "Not checked in",
-  ClockedIn: "Open",
-  ClockedOut: "Complete"
+  NOT_CHECKED_IN: "Not checked in",
+  CHECKED_IN: "Open",
+  COMPLETE: "Complete"
 }
 
 const variantMap = {
-  NotClockedIn: "danger",
-  ClockedIn: "warning",
-  ClockedOut: "success"
+  NOT_CHECKED_IN: "danger",
+  CHECKED_IN: "warning",
+  COMPLETE: "success"
 } as const
 
-function AttendanceStatusBadge({status = "NotClockedIn"}: {status: AttendanceStatus}) {
+function AttendanceStatusBadge({status = "NOT_CHECKED_IN"}: {status: AttendanceStatus}) {
   return (
     <Badge variant={variantMap[status] }>
       {statusLabel[status]}

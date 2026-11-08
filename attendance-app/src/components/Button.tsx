@@ -33,7 +33,7 @@ function Button({
     <button 
       type={type}
       disabled={disabled || loading}
-      className={cn(`rounded-lg font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${sizes[size]}`, className)}
+      className={cn(`rounded-lg hover:cursor-pointer font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${sizes[size]}`, className)}
       {...rest}
     >
       {children}

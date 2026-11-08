@@ -1,10 +1,10 @@
 import { Navigate, Outlet } from 'react-router'
-import { getToken } from '../utils';
+import { useAuth } from '../hooks/useAuth'
 
 function UnprotectedLayout() {
-    const token = getToken()
+    const { isAuthenticated } = useAuth()
 
-    if (token) return <Navigate to="/login" />
+    if (isAuthenticated) return <Navigate to="/" />
 
     return (
         <Outlet />

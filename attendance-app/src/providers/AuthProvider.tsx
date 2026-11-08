@@ -1,32 +1,38 @@
 import { type ReactNode, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-
-const accessTokenName = "attendance-access-token"
+import { accessTokenName, getAccessToken, saveAccessToken, setUnauthorizedHandler } from "../tokenStore";
 
 export const AuthProvider = ({children}: {children: ReactNode}) => {
-    const [token, setToken] = useState<string | null>(null)
-
-    useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-        const storedToken = localStorage.getItem(accessTokenName)
-        if (e.key === accessTokenName) {
-            setToken(storedToken)
-        }
-
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, []);
+    const [token, setToken] = useState<string | null>(getAccessToken)
 
     const setAccessToken = (token: string) => {
-        localStorage.setItem(accessTokenName, token)
+        saveAccessToken(token)
         setToken(token)
     }
 
     const clearAccessToken = () => {
-        localStorage.removeItem(accessTokenName)
+        saveAccessToken(null)
         setToken(null)
     }
+
+    useEffect(() => {
+        const onStorage = (e: StorageEvent) => {
+            if (e.key !== accessTokenName && e.key !== null) return;
+
+            const storedToken = localStorage.getItem(accessTokenName)
+            saveAccessToken(storedToken)
+            setToken(storedToken)
+
+        };
+        window.addEventListener('storage', onStorage);
+        return () => window.removeEventListener('storage', onStorage);
+    }, []);
+
+    useEffect(() => {
+        // Set 401 handler for fetch interceptors
+        setUnauthorizedHandler(clearAccessToken)
+        return () => setUnauthorizedHandler(null)
+    }, [])
 
     return <AuthContext.Provider value={{
         accessToken: token,

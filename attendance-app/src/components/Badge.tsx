@@ -15,7 +15,7 @@ const variants = {
 
 function Badge({variant = "success", children, className=""}: BadgeProps) {
   return (
-    <span className={cn(`px-2 py-1 text-xs rounded-xl ${variants[variant]}`, className)}>
+    <span className={cn(`px-3 py-1.5 text-xs rounded-xl ${variants[variant]}`, className)}>
         {children}
     </span>
   )

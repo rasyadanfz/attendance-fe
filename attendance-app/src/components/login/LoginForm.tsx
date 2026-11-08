@@ -26,11 +26,11 @@ function LoginForm() {
   })
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
-    trigger(data)
+    await trigger(data)
   }
 
   return (
-    <div className='flex flex-col gap-4 mx-[10%]'>
+    <div className='flex flex-col gap-4 border rounded-lg p-4'>
       <h1 className='text-center font-bold text-xl'>Login</h1>
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-3'>
           <div className='flex flex-col gap-1'>
@@ -54,7 +54,7 @@ function LoginForm() {
 
           {error && <p className='text-center text-sm text-red-600'>{error.message}</p>}
 
-          <Button type='submit' loading={isMutating}>Login</Button>
+          <Button type='submit' className='mt-3' loading={isMutating}>Login</Button>
       </form>
     </div>
   )

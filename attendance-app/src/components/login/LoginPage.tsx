@@ -2,7 +2,7 @@ import LoginForm from './LoginForm'
 
 function LoginPage() {
   return (
-    <div className='h-full'>
+    <div className='flex flex-col justify-center h-full grow self-stretch max-w-200'>
         <LoginForm />
     </div>
   )
