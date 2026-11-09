@@ -30,19 +30,22 @@ function LoginForm() {
   }
 
   return (
-    <div className='flex flex-col gap-4 border rounded-lg p-4'>
-      <h1 className='text-center font-bold text-xl'>Login</h1>
+    <div className='flex flex-col gap-4 m-4'>
+      <div>
+        <h1 className='font-bold text-3xl'>Login</h1>
+        <p className='text-sm mt-1 text-[#5A6172]'>Login to submit your attendance</p>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-3'>
           <div className='flex flex-col gap-1'>
-            <label htmlFor='email'>Email</label>
-            <input type='email' id='email' className='border rounded-lg p-2' {...register("email", {required: "Email is required"})}/>
+            <label htmlFor='email' className='text-sm font-semibold'>Email</label>
+            <input type='email' id='email' placeholder='email@company.com' className='border rounded-lg p-2 text-sm' {...register("email", {required: "Email is required"})}/>
             {errors.email && <small className='text-xs text-red-600'>{errors.email.message}</small>}
           </div>
 
           <div className='flex flex-col gap-1'>
-            <label htmlFor='password'>Password</label>
+            <label htmlFor='password' className='text-sm font-semibold'>Password</label>
             <div className='relative'>
-              <input type={toggleVisiblePassword ? 'text' : 'password'} id='password' className='w-full border rounded-lg p-2' 
+              <input type={toggleVisiblePassword ? 'text' : 'password'} id='password' placeholder='Enter your password' className='w-full border rounded-lg p-2 text-sm' 
                 {...register("password", {required: "Password is required"})}
               />
               <div className='absolute inset-y-0 pr-3 flex right-0 items-center cursor-pointer' onClick={() => setToggleVisiblePassword(p => !p)}>

@@ -2,7 +2,7 @@ import { Outlet } from 'react-router'
 
 function RootLayout() {
   return (
-    <div className='h-screen m-3 flex justify-center items-center'>
+    <div className='h-screen p-3 flex justify-center items-center bg-[#F5F5F5]'>
         <Outlet />
     </div>
   )
