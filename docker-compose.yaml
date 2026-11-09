@@ -1,0 +1,24 @@
+name: attendance-fe
+
+services:
+    admin-app:
+        container_name: admin-frontend
+        build:
+            context: ./admin-app
+            dockerfile: Dockerfile
+            args:
+                VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+        ports:
+            - "3123:80"
+        restart: unless-stopped
+
+    attendance-app:
+        container_name: attendance-frontend
+        build:
+            context: ./attendance-app
+            dockerfile: Dockerfile
+            args:
+                VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+        ports:
+            - "3124:80"
+        restart: unless-stopped
