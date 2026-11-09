@@ -1,49 +1,23 @@
-import useSWR from "swr";
 import Table, { type TableColumn } from "../Table";
 import { useEffect, useRef, useState } from "react";
-import { addEmployee, editEmployee, getEmployees, type EmployeeData } from "../../api";
+import { addEmployee, editEmployee, type EmployeeData } from "../../api";
 import { BsPencilSquare } from "react-icons/bs";
-import { useDebounce } from "../../hooks/useDebounce";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import Button from "../Button";
 import Pagination from "../Pagination";
 import ModifyEmployee from "./ModifyEmployee";
 import useSWRMutation from "swr/mutation";
-
-interface EmployeeListFilters {
-    page: number;
-    limit: number;
-    search: string;
-}
-
-function buildQueryString(filter: EmployeeListFilters): string {
-    let query = `?page=${filter.page}&limit=${filter.limit}`;
-    if (filter.search !== "") query += `&search=${filter.search}`;
-
-    return query;
-}
+import { useEmployee } from "../../hooks/useEmployee";
 
 function EmployeeList() {
-    const [filters, setFilters] = useState<EmployeeListFilters>({
-        page: 1,
-        limit: 10,
-        search: "",
-    });
     const [employeeEditData, setEmployeeEditData] = useState<EmployeeData | null>(null);
-    const debouncedSearch = useDebounce(filters.search, 200);
-    const { data, isLoading, error, mutate } = useSWR(
-        `/employees${buildQueryString({ ...filters, search: debouncedSearch })}`,
-        getEmployees,
-        {
-            revalidateOnFocus: false,
-        },
-    );
+    const { data, isLoading, error, refresh, filters, setFilters } = useEmployee();
     const {
         trigger: create,
         error: createError,
         isMutating: isCreating,
     } = useSWRMutation("/employees", addEmployee, {
-        onSuccess: () => mutate(),
+        onSuccess: () => refresh(),
         throwOnError: false,
     });
 
@@ -55,16 +29,12 @@ function EmployeeList() {
         () => (employeeEditData ? `/employees/${employeeEditData.id}` : null),
         editEmployee,
         {
-            onSuccess: () => mutate(),
+            onSuccess: () => refresh(),
             throwOnError: false,
         },
     );
     const addEmployeeModal = useRef<HTMLDialogElement>(null);
     const editEmployeeModal = useRef<HTMLDialogElement>(null);
-
-    useEffect(() => {
-        if (debouncedSearch) mutate();
-    }, [debouncedSearch, mutate]);
 
     useEffect(() => {
         if (employeeEditData && !editEmployeeModal.current?.open) {
@@ -104,7 +74,7 @@ function EmployeeList() {
     ];
     return (
         <div>
-            <h1 className="font-bold text-2xl mb-6">Data Karyawan</h1>
+            <h1 className="font-bold text-2xl mb-6">Employees Data</h1>
             <div className="flex justify-between mb-3 md:mb-6 gap-3">
                 <div className="flex grow max-w-80 md:max-w-140 gap-2 items-center bg-white border border-gray-300 p-2 rounded-lg">
                     <FaSearch className="text-gray-400" />
@@ -125,7 +95,7 @@ function EmployeeList() {
                 </Button>
             </div>
             <Table
-                data={data?.employees ?? []}
+                data={data.employees}
                 isLoading={isLoading}
                 columns={employeeColumns}
                 keyExtractor={(e) => e.id}
@@ -134,7 +104,7 @@ function EmployeeList() {
             <Pagination
                 currentPage={filters.page}
                 limit={filters.limit}
-                totalCount={data?.total_count ?? 0}
+                totalCount={data.totalCount}
                 entityName="employees"
                 onPrevClick={() => setFilters((prev) => ({ ...prev, page: Math.max(0, prev.page - 1) }))}
                 onNextClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}

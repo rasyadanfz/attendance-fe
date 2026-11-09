@@ -146,3 +146,47 @@ export async function editEmployee(
 
     return res.json();
 }
+
+export type Attendance = {
+    id: number;
+    employeeId: number;
+    date: string;
+    action: "check_in" | "check_out";
+    occuredAt: string;
+    photoFilename: string | null;
+    createdAt: string;
+    attendancePhotoHolderId: number;
+};
+
+export type AttendanceResponse = {
+    attendances: Attendance[];
+    count: number;
+};
+
+export async function getAttendance(url: string): Promise<AttendanceResponse> {
+    const res = await apiFetch(`${BASE_URL}${url}`, {
+        method: "GET",
+    });
+
+    if (!res.ok) {
+        const body = await res.json();
+        throw new Error(body.message ?? `Failed to fetch attendance data`);
+    }
+
+    return res.json();
+}
+
+export async function getPhoto(url: string) {
+    const controller = new AbortController();
+    const res = await apiFetch(`${BASE_URL}${url}`, {
+        method: "GET",
+        signal: controller.signal,
+    });
+
+    if (!res.ok) {
+        const body = await res.json();
+        throw new Error(body.message ?? `Failed to fetch photo`);
+    }
+
+    return res.blob();
+}
