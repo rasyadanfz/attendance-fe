@@ -1,11 +1,11 @@
-import React, { type ButtonHTMLAttributes } from 'react'
-import { cn } from '../utils';
+import React, { type ButtonHTMLAttributes } from "react";
+import { cn } from "../utils";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-    loading?: boolean,
-    variant?: "primary" | "secondary",
-    size?: "sm" | "md" | "lg"
-}
+  loading?: boolean;
+  variant?: "primary" | "secondary";
+  size?: "sm" | "md" | "lg";
+};
 
 const variants = {
   primary: "bg-black text-white hover:bg-gray-700",
@@ -30,15 +30,18 @@ function Button({
   ...rest
 }: ButtonProps) {
   return (
-    <button 
+    <button
       type={type}
       disabled={disabled || loading}
-      className={cn(`text-base font-semibold rounded-lg hover:cursor-pointer transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${sizes[size]}`, className)}
+      className={cn(
+        `text-base font-semibold rounded-lg hover:cursor-pointer transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${sizes[size]}`,
+        className,
+      )}
       {...rest}
     >
       {children}
     </button>
-  )
+  );
 }
 
-export default Button
+export default Button;

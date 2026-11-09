@@ -1,14 +1,12 @@
-import { Navigate, Outlet } from 'react-router'
-import { useAuth } from '../hooks/useAuth'
+import { Navigate, Outlet } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 function UnprotectedLayout() {
-    const { isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuth();
 
-    if (isAuthenticated) return <Navigate to="/" />
+  if (isAuthenticated) return <Navigate to="/" />;
 
-    return (
-        <Outlet />
-    )
+  return <Outlet />;
 }
 
-export default UnprotectedLayout
+export default UnprotectedLayout;

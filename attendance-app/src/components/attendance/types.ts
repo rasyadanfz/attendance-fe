@@ -1,1 +1,1 @@
-export type AttendanceStatus = "NOT_CHECKED_IN" | "CHECKED_IN" | "COMPLETE"
+export type AttendanceStatus = "NOT_CHECKED_IN" | "CHECKED_IN" | "COMPLETE";
