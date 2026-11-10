@@ -33,8 +33,8 @@ cp .env.example .env
 docker compose up -d
 ```
 
-- Aplikasi admin HR tersedia pada `http://localhost:3124`
-- Aplikasi karyawan tersedia pada `http://localhost:3123`
+- Aplikasi admin HR tersedia pada `http://localhost:3123`
+- Aplikasi karyawan tersedia pada `http://localhost:3124`
 - Akun HR
     - email: `hr_admin@company.com`
     - password: `hr_admin_password`
