@@ -40,6 +40,7 @@ function AttendanceAction({
         if (attendanceStatus === "COMPLETE") return;
 
         if (data.fileUpload && data.fileUpload.length && data.fileUpload[0]) {
+            if (data.fileUpload[0].size >= 4 * 1000 * 1000) throw new Error("Image must be < 4 MB");
             formData.append("photo", data.fileUpload[0]);
         }
 
