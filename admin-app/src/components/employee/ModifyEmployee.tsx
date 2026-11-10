@@ -15,6 +15,16 @@ interface ModifyEmployeeProps {
     onClose?: () => void;
 }
 
+const EMPTY_FORM: FormValues = {
+    full_name: "",
+    email: "",
+    position: "",
+    department: "",
+    phone_number: "",
+    password: "",
+    status: "active",
+};
+
 function ModifyEmployee({
     action,
     ref,
@@ -29,21 +39,12 @@ function ModifyEmployee({
         handleSubmit,
         formState: { errors },
         reset,
-        setValue,
+        watch,
     } = useForm<FormValues>({
-        defaultValues: {
-            status: "active",
-        },
-        values: employee ?? {
-            full_name: "",
-            email: "",
-            position: "",
-            department: "",
-            phone_number: "",
-            status: "active",
-            password: "",
-        },
+        defaultValues: EMPTY_FORM,
+        values: employee ?? EMPTY_FORM,
     });
+    const email = watch("email");
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         await onFormSubmit({
@@ -55,6 +56,7 @@ function ModifyEmployee({
             status: data.status,
             password: data.password,
         });
+        reset(EMPTY_FORM);
         ref.current?.close();
     };
 
@@ -73,10 +75,8 @@ function ModifyEmployee({
             </h1>
             <form
                 className="mt-3"
-                method="dialog"
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSubmit(onSubmit)(e);
+                onSubmit={async (e) => {
+                    await handleSubmit(onSubmit)(e);
                 }}
             >
                 <div>
@@ -153,24 +153,14 @@ function ModifyEmployee({
                 <div className="mt-4">
                     <h2 className="flex font-semibold text-base mb-3">Login Account</h2>
                     <div className="flex gap-5 items-center">
-                        <FormInput
-                            register={register}
-                            label="Email"
-                            id="email2"
-                            disabled
-                            formKey="email"
-                            placeholder="ex: user@company.com"
-                            type="email"
-                            error={errors.email?.message}
-                            registerOptions={{
-                                required: "Email is required",
-                                onChange: (e) =>
-                                    setValue("email", e.target.value, {
-                                        shouldValidate: true,
-                                        shouldDirty: true,
-                                    }),
-                            }}
-                        />
+                        <div className="flex flex-col gap-1 min-w-65">
+                            <p className="text-sm ml-px">Email</p>
+                            <div
+                                className={`p-2 text-sm border ${!email ? "text-gray-600" : ""} border-gray-300 rounded-md`}
+                            >
+                                {email || "Fill in the email above"}
+                            </div>
+                        </div>
                         {action === "add" && (
                             <FormInput
                                 register={register}
